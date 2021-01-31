@@ -1,5 +1,6 @@
 ﻿namespace FSharpKoans
 open FSharpKoans.Core
+open System
 
 //---------------------------------------------------------------
 // Apply Your Knowledge!
@@ -58,8 +59,25 @@ module ``about the stock example`` =
     // tests for yourself along the way. You can also try
     // using the F# Interactive window to check your progress.
 
+    let splitCommas (x: string) = x.Split([|','|])
+
+    let convertToTuple (list: string []) =
+        let opened = Double.Parse list.[1]
+        let closed = Double.Parse list.[4]
+
+        let diff = opened - closed |> abs
+
+        (list.[0], diff)
+
     [<Koan>]
     let YouGotTheAnswerCorrect() =
-        let result =  __
+        let result =
+            stockData
+            |> List.tail
+            |> List.map (splitCommas >> convertToTuple)
+            |> List.sortBy (snd)
+            |> List.rev
+            |> List.head
+            |> fst
 
         AssertEquality "2012-03-13" result
